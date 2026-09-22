@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plantify — Plant-Based Food Truck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,500&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F4EAdd;
+    --cream-2:#EFE1CC;
+    --forest:#1F4B3F;
+    --forest-deep:#163A31;
+    --tan:#E7C9A0;
+    --tan-deep:#DDB37E;
+    --ink:#22301F;
+    --line: rgba(31,75,63,0.15);
+    --max:1240px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; scroll-padding-top:100px;}
+  body{
+    margin:0; background:var(--cream); color:var(--ink);
+    font-family:'Quicksand',sans-serif; font-weight:500; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(rgba(31,75,63,0.06) 1px, transparent 1px);
+    background-size:22px 22px;
+  }
+  h1,h2,h3,.display{font-family:'Quicksand',sans-serif; font-weight:700; color:var(--forest); margin:0;}
+  em{font-family:'Fraunces',serif; font-style:italic; font-weight:500; color:var(--forest);}
+  a{text-decoration:none; color:inherit;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 44px;}
+  @media(max-width:640px){.wrap{padding:0 20px;}}
+
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity .8s ease, transform .8s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  .reveal-l{opacity:0; transform:translateX(-40px) rotate(-2deg); transition:opacity .9s ease, transform .9s ease;}
+  .reveal-l.in{opacity:1; transform:translateX(0) rotate(-1.5deg);}
+
+  /* Offset button */
+  .btn-offset{position:relative; display:inline-block; border:none; background:none; padding:0; cursor:pointer;}
+  .btn-offset::after{
+    content:''; position:absolute; inset:0; border:2px solid var(--forest);
+    top:8px; left:8px; z-index:0; transition:transform .3s;
+  }
+  .btn-offset .btn-face{
+    position:relative; z-index:1; display:inline-flex; align-items:center; justify-content:center;
+    background:var(--forest); color:#fff; padding:16px 34px; font-weight:700; font-size:15px;
+    transition:transform .3s cubic-bezier(.2,.8,.2,1), background .3s; border:none;
+  }
+  .btn-offset:hover .btn-face{transform:translate(4px,4px); background:var(--forest-deep);}
+  .btn-offset:hover::after{transform:translate(-4px,-4px);}
+
+  /* NAV */
+  header{position:sticky; top:0; z-index:100; background:var(--cream); border-bottom:1px solid transparent;}
+  nav.wrap{display:flex; align-items:center; justify-content:space-between; height:100px;}
+  .logo{display:flex; align-items:center; gap:10px; font-family:'Quicksand',sans-serif; font-weight:700; font-size:24px; color:var(--forest);}
+  .logo .leaf{font-size:22px; transform:rotate(-15deg); display:inline-block;}
+  .navlinks{display:flex; gap:34px; font-weight:600; font-size:15px;}
+  .navlinks a{color:var(--forest); opacity:.85; position:relative; transition:opacity .25s;}
+  .navlinks a:hover{opacity:1;}
+  .navlinks a::after{content:''; position:absolute; left:0; bottom:-4px; width:0; height:2px; background:var(--forest); transition:width .3s;}
+  .navlinks a:hover::after{width:100%;}
+  .burger{display:none; flex-direction:column; gap:5px; cursor:pointer; z-index:200;}
+  .burger span{width:24px; height:2.5px; border-radius:2px; background:var(--forest); transition:.3s;}
+  .burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .burger.open span:nth-child(2){opacity:0;}
+  .burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .mobile-menu{
+    position:fixed; inset:0; background:var(--cream); z-index:150;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px;
+    transform:translateY(-100%); transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  }
+  .mobile-menu.open{transform:translateY(0);}
+  .mobile-menu a{font-size:26px; font-weight:700; color:var(--forest);}
+  @media(max-width:960px){.navlinks, header .btn-offset{display:none;} .burger{display:flex;}}
+
+  /* HERO */
+  .hero{padding:20px 0 100px; position:relative;}
+  .hero-grid{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; position:relative;}
+  @media(max-width:960px){.hero-grid{grid-template-columns:1fr;}}
+  .badge{
+    display:inline-block; background:var(--tan); color:var(--forest-deep); font-weight:700; font-size:12.5px;
+    letter-spacing:1.5px; text-transform:uppercase; padding:11px 24px; border-radius:30px; margin-bottom:26px;
+  }
+  .hero-left h1{font-size:clamp(46px,6.4vw,76px); line-height:1.02; letter-spacing:-1px;}
+  .hero-left p.lead{font-size:16.5px; color:var(--ink); opacity:.78; max-width:440px; margin:26px 0 36px; line-height:1.8;}
+
+  .hero-right{position:relative; display:flex; justify-content:center;}
+  .hero-img-frame{position:relative; width:100%; max-width:460px;}
+  .hero-img-frame .plate{
+    width:100%; aspect-ratio:1/1.05; overflow:hidden; transform:rotate(3deg);
+    box-shadow:0 30px 60px -20px rgba(31,75,63,.35); position:relative; z-index:2; border-radius:4px;
+  }
+  .hero-img-frame .plate img{width:100%; height:100%; object-fit:cover;}
+  .squiggle{position:absolute; z-index:1; opacity:.9;}
+  .squiggle.s1{top:-6%; right:-10%; width:130px;}
+  .dots-deco{position:absolute; bottom:-6%; left:-8%; width:90px; opacity:.85; z-index:1;}
+  @media(max-width:640px){.squiggle.s1{display:none;} .dots-deco{display:none;}}
+
+  /* SECTION */
+  .section{padding:120px 0;}
+  @media(max-width:640px){.section{padding:74px 0;}}
+  .kicker{display:inline-block; background:var(--tan); color:var(--forest-deep); font-weight:700; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; padding:9px 20px; border-radius:24px;}
+  .section-head h2{font-size:clamp(30px,4.2vw,48px); margin-top:16px; line-height:1.08;}
+  .section-head{max-width:600px; margin-bottom:52px;}
+  .section-head.center{margin-left:auto; margin-right:auto; text-align:center;}
+
+  /* DAILY SPECIALS (NEW SECTION) */
+  .special-card{
+    background:#fff; border-radius:28px; padding:40px; display:grid; grid-template-columns:1.2fr 1fr;
+    gap:40px; align-items:center; border:2px solid var(--line); position:relative; overflow:hidden;
+    box-shadow:0 20px 40px -20px rgba(31,75,63,.15);
+  }
+  @media(max-width:850px){.special-card{grid-template-columns:1fr; padding:28px;}}
+  .special-img{border-radius:20px; overflow:hidden; aspect-ratio:4/3;}
+  .special-img img{width:100%; height:100%; object-fit:cover;}
+  .special-tag{
+    position:absolute; top:24px; right:-32px; background:var(--tan-deep); color:var(--forest-deep);
+    font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:1px; padding:8px 40px;
+    transform:rotate(45deg); box-shadow:0 4px 10px rgba(0,0,0,0.05);
+  }
+
+  /* MENU */
+  .tabs{display:flex; gap:12px; margin:32px 0 44px; flex-wrap:wrap;}
+  .tab{
+    padding:11px 22px; border-radius:30px; border:2px solid var(--forest); background:transparent;
+    font-weight:700; font-size:13.5px; cursor:pointer; transition:all .3s; color:var(--forest);
+  }
+  .tab.active{background:var(--forest); color:#fff;}
+  .menu-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px;}
+  @media(max-width:960px){.menu-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:640px){.menu-grid{grid-template-columns:1fr;}}
+  .item{
+    background:#fff; border-radius:20px; padding:20px; transition:transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .5s, opacity .4s;
+    border:2px solid transparent;
+  }
+  .item:hover{transform:translateY(-8px) rotate(-.5deg); box-shadow:0 24px 44px -24px rgba(31,75,63,.35); border-color:var(--line);}
+  .item .img-wrap{border-radius:14px; overflow:hidden; aspect-ratio:4/3; margin-bottom:16px;}
+  .item .img-wrap img{width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
+  .item:hover .img-wrap img{transform:scale(1.1);}
+  .item-top{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
+  .item h3{font-size:18px;}
+  .item .price{background:var(--tan); padding:4px 12px; border-radius:20px; font-weight:700; font-size:13.5px; white-space:nowrap; color:var(--forest-deep);}
+  .item p{font-size:13.5px; opacity:.7; margin-top:8px;}
+
+  /* SCHEDULE */
+  .schedule-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  @media(max-width:900px){.schedule-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:520px){.schedule-grid{grid-template-columns:1fr;}}
+  .sched-card{background:var(--forest); color:var(--cream); border-radius:20px; padding:26px 22px; transition:transform .35s;}
+  .sched-card:hover{transform:translateY(-6px);}
+  .sched-card .day{font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:1.5px; color:var(--tan);}
+  .sched-card h3{color:#fff; font-size:19px; margin-top:10px;}
+  .sched-card p{font-size:13px; opacity:.75; margin-top:8px;}
+
+  /* ABOUT */
+  .about{display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:center;}
+  @media(max-width:900px){.about{grid-template-columns:1fr; gap:40px;}}
+  .about-imgs{position:relative; height:440px;}
+  @media(max-width:900px){.about-imgs{height:340px;}}
+  .about-imgs img{position:absolute; border-radius:20px; object-fit:cover; box-shadow:0 24px 50px -24px rgba(31,75,63,.35);}
+  .about-imgs .im1{width:72%; height:78%; top:0; left:0; transform:rotate(-2deg);}
+  .about-imgs .im2{width:50%; height:52%; bottom:0; right:0; border:8px solid var(--cream); transform:rotate(2deg);}
+  .about p.lead{font-size:16px; opacity:.78; margin:20px 0 30px; max-width:460px; line-height:1.8;}
+  .stat-row{display:flex; gap:38px; flex-wrap:wrap;}
+  .stat .num{font-family:'Fraunces',serif; font-style:italic; font-size:34px; color:var(--forest);}
+  .stat .label{font-size:12.5px; opacity:.7; margin-top:4px;}
+
+  /* REVIEWS (NEW SECTION) */
+  .reviews-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px;}
+  @media(max-width:900px){.reviews-grid{grid-template-columns:1fr;}}
+  .review-card{
+    background:#fff; border-radius:20px; padding:32px; border:2px solid var(--line);
+    display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .review-stars{color:var(--tan-deep); font-size:18px; margin-bottom:12px;}
+  .review-card p{font-size:15px; line-height:1.6; opacity:.85; margin:0 0 20px;}
+  .review-author{font-weight:700; font-size:14px; color:var(--forest);}
+  .review-author span{display:block; font-weight:500; font-size:12px; opacity:.6; color:var(--ink);}
+
+  /* PRESS & MEDIA (NEW SECTION) */
+  .press-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:30px;}
+  @media(max-width:768px){.press-grid{grid-template-columns:1fr;}}
+  .press-card{
+    background:var(--cream-2); border-radius:20px; padding:36px; border:1px solid var(--line);
+    position:relative;
+  }
+  .press-logo{font-family:'Fraunces',serif; font-weight:600; font-size:22px; color:var(--forest); margin-bottom:16px;}
+  .press-quote{font-size:16px; line-height:1.6; opacity:.85; margin:0;}
+
+  /* CATERING & CONTACT FORM (NEW SECTION) */
+  .form-grid{display:grid; grid-template-columns:1fr 1.2fr; gap:60px; align-items:start;}
+  @media(max-width:900px){.form-grid{grid-template-columns:1fr; gap:40px;}}
+  .contact-form{background:#fff; border-radius:24px; padding:40px; border:2px solid var(--line);}
+  @media(max-width:500px){.contact-form{padding:24px;}}
+  .form-group{margin-bottom:20px;}
+  .form-group label{display:block; font-weight:700; font-size:13px; margin-bottom:8px; color:var(--forest);}
+  .form-group input, .form-group select, .form-group textarea{
+    width:100%; padding:14px; border-radius:12px; border:1.5px solid var(--line);
+    background:var(--cream); font-family:inherit; font-size:14px; color:var(--ink); outline:none;
+    transition:border-color .3s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+    border-color:var(--forest);
+  }
+
+  /* CATERING CTA BAND */
+  .cta-band{
+    background:var(--forest); color:var(--cream); border-radius:28px; padding:70px 56px;
+    display:flex; justify-content:space-between; align-items:center; gap:30px; flex-wrap:wrap; position:relative; overflow:hidden;
+  }
+  .cta-band::before{
+    content:''; position:absolute; width:300px; height:300px; border-radius:50%;
+    background:radial-gradient(circle,var(--tan) 0%, transparent 70%); opacity:.25; right:-90px; top:-100px;
+  }
+  .cta-band h2{color:#fff; font-size:clamp(26px,3.4vw,38px); max-width:480px; position:relative; line-height:1.2;}
+  .cta-band .btn-offset .btn-face{background:var(--tan); color:var(--forest-deep);}
+  .cta-band .btn-offset::after{border-color:var(--tan);}
+
+  /* FOOTER */
+  footer{padding:70px 0 30px;}
+  .foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1.2fr; gap:40px;}
+  @media(max-width:760px){.foot-grid{grid-template-columns:1fr 1fr; row-gap:36px;}}
+  .foot-grid h4{font-size:13px; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px; color:var(--forest);}
+  .foot-grid ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;}
+  .foot-grid a{font-size:14px; opacity:.75;}
+  .foot-grid a:hover{opacity:1;}
+  .foot-bottom{margin-top:56px; padding-top:24px; border-top:2px solid var(--line); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:12.5px; opacity:.7;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001s !important; transition-duration:.001s !important;}
+  }
+</style>
+</head>
+<body>
+<a href="index.html" aria-label="Back to templates" style="position:fixed;top:14px;right:16px;z-index:1000;padding:9px 14px;border-radius:999px;background:#1c3b2b;color:#fff;font:600 12px/1 system-ui,sans-serif;letter-spacing:.04em;box-shadow:0 6px 18px rgba(0,0,0,.2);">&larr; Templates</a>
+
+<header>
+  <nav class="wrap">
+    <div class="logo"><span class="leaf">🌿</span>Plantify</div>
+    <div class="navlinks">
+      <a href="#specials">Specials</a>
+      <a href="#menu">Menu</a>
+      <a href="#schedule">Schedule</a>
+      <a href="#about">About</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="btn-offset"><a href="#contact" class="btn-face">Find us</a></div>
+    <div class="burger" id="burger"><span></span><span></span><span></span></div>
+  </nav>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#specials">Specials</a>
+  <a href="#menu">Menu</a>
+  <a href="#schedule">Schedule</a>
+  <a href="#about">About</a>
+  <a href="#reviews">Reviews</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-left reveal in">
+      <span class="badge">Food Truck</span>
+      <h1>All plants.<br><em>No animals.</em></h1>
+      <p class="lead">Bold, unapologetically vegan street food built from produce we pick up the same morning we cook it — no substitutes, no shortcuts, just real flavor.</p>
+      <div class="btn-offset"><a href="#contact" class="btn-face">Find us</a></div>
+    </div>
+    <div class="hero-right reveal in" style="transition-delay:.15s;">
+      <div class="hero-img-frame">
+        <svg class="squiggle s1" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 30 Q 15 5, 28 30 T 54 30 T 80 30 T 106 30" stroke="#DDB37E" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+        <div class="plate">
+          <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=900&auto=format&fit=crop" alt="Vegan tacos with chickpeas and lime">
+        </div>
+        <svg class="dots-deco" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="8" r="4" fill="#DDB37E"/><circle cx="26" cy="8" r="4" fill="#DDB37E"/>
+          <circle cx="8" cy="26" r="4" fill="#DDB37E"/><circle cx="44" cy="8" r="4" fill="#DDB37E"/>
+          <circle cx="8" cy="44" r="4" fill="#DDB37E"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEW SECTION 1: DAILY SPECIAL / CHEF'S RECOMMENDATION -->
+<section class="section" id="specials" style="padding-top:20px;">
+  <div class="wrap">
+    <div class="special-card reveal">
+      <div class="special-tag">Limited Batch</div>
+      <div class="special-img">
+        <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=900&auto=format&fit=crop" alt="Chef's Special Bowl">
+      </div>
+      <div>
+        <span class="kicker">Chef's Special</span>
+        <h2 style="margin: 12px 0; font-size:clamp(26px,3.2vw,36px);">Charred Oyster Mushroom Po'Boy</h2>
+        <p style="opacity:.8; line-height:1.7; margin-bottom:24px;">Crispy cornmeal-crusted oyster mushrooms, spicy Cajun remoulade, shredded lettuce, and heirloom tomatoes served on a freshly toasted local sourdough baguette.</p>
+        <div style="display:flex; align-items:center; gap:20px;">
+          <span style="font-family:'Fraunces',serif; font-size:28px; font-weight:600; color:var(--forest);">$12.50</span>
+          <div class="btn-offset"><a href="#schedule" class="btn-face">Catch It Today</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="section" id="menu">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">On the Truck</span>
+      <h2>Today's menu</h2>
+    </div>
+    <div class="tabs reveal">
+      <button class="tab active" data-filter="all">All</button>
+      <button class="tab" data-filter="tacos">Tacos</button>
+      <button class="tab" data-filter="bowls">Bowls</button>
+      <button class="tab" data-filter="sides">Sides</button>
+    </div>
+    <div class="menu-grid" id="menuGrid"></div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section class="section" id="schedule">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Find the Truck</span>
+      <h2>This week's schedule</h2>
+    </div>
+    <div class="schedule-grid reveal">
+      <div class="sched-card"><div class="day">Monday</div><h3>Riverside Park</h3><p>11:30am – 2:30pm</p></div>
+      <div class="sched-card"><div class="day">Wednesday</div><h3>Maple Street Market</h3><p>4:00pm – 8:00pm</p></div>
+      <div class="sched-card"><div class="day">Friday</div><h3>Tech Row Plaza</h3><p>11:00am – 3:00pm</p></div>
+      <div class="sched-card"><div class="day">Saturday</div><h3>Farmers Market</h3><p>9:00am – 1:00pm</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="wrap about">
+    <div class="about-imgs reveal-l">
+      <img class="im1" src="https://images.unsplash.com/photo-1615887023544-63a1e14b969f?q=80&w=800&auto=format&fit=crop" alt="Chopping fresh vegetables">
+      <img class="im2" src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=700&auto=format&fit=crop" alt="Fresh produce crate">
+    </div>
+    <div class="reveal" style="transition-delay:.1s;">
+      <span class="kicker">Our Story</span>
+      <h2 style="margin-top:14px; font-size:clamp(28px,3.6vw,42px);">Started with one cart<br>and a stubborn recipe</h2>
+      <p class="lead">Plantify started as a single cart at a Sunday market, built on the idea that plant-based food shouldn't taste like a compromise. Four years later we're still cooking from the same three principles: whole ingredients, bold spice, and nothing pretending to be something it's not.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="num">4</div><div class="label">Years on the road</div></div>
+        <div class="stat"><div class="num">100%</div><div class="label">Plant-based menu</div></div>
+        <div class="stat"><div class="num">6</div><div class="label">Weekly locations</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEW SECTION 2: TESTIMONIALS / REVIEWS -->
+<section class="section" id="reviews">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="kicker">Street Cred</span>
+      <h2>What people are saying</h2>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div>
+          <div class="review-stars">★★★★★</div>
+          <p>"The Chickpea Tinga Tacos ruined all other tacos for me. I track their location every week just to make sure I get my fix."</p>
+        </div>
+        <div class="review-author">Elena R. <span>Local Foodie</span></div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.1s;">
+        <div>
+          <div class="review-stars">★★★★★</div>
+          <p>"Even my die-hard meat-eating coworkers line up for Plantify when they park at Tech Row. Hands down best street food in town."</p>
+        </div>
+        <div class="review-author">Marcus T. <span>Regular Customer</span></div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.2s;">
+        <div>
+          <div class="review-stars">★★★★★</div>
+          <p>"They catered our outdoor wedding reception and people are still talking about the Jackfruit Carnitas six months later!"</p>
+        </div>
+        <div class="review-author">Sarah & Dan <span>Catering Clients</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEW SECTION 3: PRESS & MEDIA -->
+<section class="section" style="padding-top:0;">
+  <div class="wrap">
+    <div class="press-grid reveal">
+      <div class="press-card">
+        <div class="press-logo">Daily Food Journal</div>
+        <p class="press-quote">"Plantify is proving that street food doesn't need meat to be completely rich, satisfying, and addictive."</p>
+      </div>
+      <div class="press-card">
+        <div class="press-logo">Metro Culture Weekly</div>
+        <p class="press-quote">"Voted #1 Food Truck of the Year for their commitment to farm-fresh, zero-compromise plant-based cooking."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATERING CTA BAND -->
+<section class="section" id="catering" style="padding-bottom:60px;">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <h2>Planning an event? We cater weddings, offices, and everything in between.</h2>
+      <div class="btn-offset"><a href="#contact" class="btn-face">Book Catering</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEW SECTION 4: CONTACT & CATERING FORM -->
+<section class="section" id="contact" style="padding-top:0;">
+  <div class="wrap">
+    <div class="form-grid">
+      <div class="reveal">
+        <span class="kicker">Get in Touch</span>
+        <h2 style="margin-top:14px; font-size:clamp(28px,3.6vw,42px);">Let's bring Plantify to your next event</h2>
+        <p style="opacity:.8; line-height:1.7; margin:20px 0 30px;">Have a question about our schedule, ingredients, or catering options? Send us a message and we'll get back to you within 24 hours.</p>
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div><strong>Direct Line:</strong> <span style="opacity:.8;">+91 123 456 7890</span></div>
+          <div><strong>Email:</strong> <span style="opacity:.8;">hello@plantify.com</span></div>
+          <div><strong>Base:</strong> <span style="opacity:.8;">Dehradun, Uttarakhand</span></div>
+        </div>
+      </div>
+      <form class="contact-form reveal" onsubmit="event.preventDefault(); alert('Thank you for reaching out! We will be in touch shortly.');">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" required placeholder="Jane Doe">
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required placeholder="jane@example.com">
+        </div>
+        <div class="form-group">
+          <label for="inquiry">Inquiry Type</label>
+          <select id="inquiry">
+            <option>Private Catering Event</option>
+            <option>General Inquiry / Question</option>
+            <option>Press & Media</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" rows="4" required placeholder="Tell us about your event or question..."></textarea>
+        </div>
+        <button type="submit" class="btn-offset" style="width:100%;"><span class="btn-face" style="width:100%;">Send Message</span></button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="logo"><span class="leaf">🌿</span>Plantify</div>
+        <p style="font-size:14px; opacity:.75; margin-top:16px; max-width:260px;">A plant-based food truck serving bold, whole-food street food since 2022.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#specials">Specials</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#schedule">Schedule</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Hours</h4>
+        <ul>
+          <li style="opacity:.75;">Mon, Wed, Fri, Sat</li>
+          <li style="opacity:.75;">See schedule above</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li style="opacity:.75;">Dehradun, Uttarakhand</li>
+          <li><a href="mailto:hello@plantify.com">hello@plantify.com</a></li>
+          <li><a href="tel:+911234567890">+91 123 456 7890</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Plantify Food Truck. All rights reserved.</span>
+      <span>All plants. No animals.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+burger.addEventListener('click', ()=>{
+  burger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+});
+mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>{
+  burger.classList.remove('open'); mobileMenu.classList.remove('open');
+}));
+
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+},{threshold:0.15});
+document.querySelectorAll('.reveal, .reveal-l').forEach(el=>io.observe(el));
+
+const items = [
+  {name:"Chickpea Tinga Taco", price:"$5", cat:"tacos", img:"https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=700&auto=format&fit=crop", desc:"Smoky chipotle chickpeas, pickled onion, lime crema."},
+  {name:"Jackfruit Carnitas Taco", price:"$5.5", cat:"tacos", img:"https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?q=80&w=700&auto=format&fit=crop", desc:"Slow-braised jackfruit, charred pineapple, cilantro."},
+  {name:"Cauliflower Al Pastor", price:"$5.5", cat:"tacos", img:"https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?q=80&w=700&auto=format&fit=crop", desc:"Achiote-rubbed cauliflower, salsa verde, pickled onion."},
+  {name:"Harvest Grain Bowl", price:"$11", cat:"bowls", img:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=700&auto=format&fit=crop", desc:"Quinoa, roasted squash, kale, tahini dressing."},
+  {name:"Spicy Black Bean Bowl", price:"$10", cat:"bowls", img:"https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=700&auto=format&fit=crop", desc:"Cilantro rice, black beans, avocado, chipotle crema."},
+  {name:"Charred Corn Bowl", price:"$10.5", cat:"bowls", img:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=700&auto=format&fit=crop", desc:"Elote-style corn, black beans, cotija-style cashew crumble."},
+  {name:"Crispy Plantains", price:"$4", cat:"sides", img:"https://images.unsplash.com/photo-1615887023544-63a1e14b969f?q=80&w=700&auto=format&fit=crop", desc:"Fried sweet plantain, lime, chili salt."},
+  {name:"Street Corn Elote", price:"$4.5", cat:"sides", img:"https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=700&auto=format&fit=crop", desc:"Grilled corn, vegan crema, chili powder, lime."},
+  {name:"Chips & Salsa Verde", price:"$3.5", cat:"sides", img:"https://images.unsplash.com/photo-1600335895229-6e75511892c8?q=80&w=700&auto=format&fit=crop", desc:"House-fried tortilla chips, roasted tomatillo salsa."}
+];
+const grid = document.getElementById('menuGrid');
+function renderMenu(filter){
+  grid.innerHTML='';
+  items.filter(d=>filter==='all'||d.cat===filter).forEach((d,i)=>{
+    const el=document.createElement('div');
+    el.className='item reveal';
+    el.style.transitionDelay=(i*0.05)+'s';
+    el.innerHTML=`
+      <div class="img-wrap"><img src="${d.img}" alt="${d.name}"></div>
+      <div class="item-top"><h3>${d.name}</h3><span class="price">${d.price}</span></div>
+      <p>${d.desc}</p>`;
+    grid.appendChild(el);
+    io.observe(el);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('in')));
+  });
+}
+renderMenu('all');
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    renderMenu(tab.dataset.filter);
+  });
+});
+</script>
+</body>
+</html>

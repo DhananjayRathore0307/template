@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eclipse — Bistro Restaurant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#141311;
+    --bg-2:#1B1A17;
+    --paper:#F3EEE6;
+    --gold:#C9A15A;
+    --gold-soft:#8B754A;
+    --line: rgba(243,238,230,0.14);
+    --muted: rgba(243,238,230,0.62);
+    --max:1240px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; scroll-padding-top:100px;}
+  body{
+    margin:0; background:var(--bg); color:var(--paper);
+    font-family:'Jost',sans-serif; overflow-x:hidden; -webkit-font-smoothing:antialiased;
+    font-weight:300; letter-spacing:.2px;
+  }
+  h1,h2,h3,.display{font-family:'Cormorant Garamond',serif; font-weight:500; color:var(--paper); margin:0;}
+  a{text-decoration:none; color:inherit;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 44px;}
+  @media(max-width:640px){.wrap{padding:0 22px;}}
+
+  .reveal{opacity:0; transform:translateY(26px); transition:opacity .8s ease, transform .8s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* NAV */
+  header{position:sticky; top:0; z-index:100; background:rgba(20,19,17,0.86); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+  nav.wrap{display:flex; align-items:center; justify-content:space-between; height:92px; position:relative;}
+  .navlinks{display:flex; gap:34px; font-size:12.5px; letter-spacing:2px; text-transform:uppercase;}
+  .navlinks a{color:var(--muted); position:relative; padding:6px 0; transition:color .3s;}
+  .navlinks a:hover, .navlinks a.active{color:var(--gold);}
+  .logo{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    text-align:center;
+  }
+  .logo .mark{font-family:'Cormorant Garamond',serif; font-style:italic; font-size:28px; letter-spacing:1px;}
+  .logo .sub{font-size:9px; letter-spacing:3px; color:var(--gold-soft); margin-top:2px;}
+  .burger{display:none; flex-direction:column; gap:5px; cursor:pointer; z-index:200;}
+  .burger span{width:24px; height:1.5px; background:var(--paper); transition:.3s;}
+  .burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+  .burger.open span:nth-child(2){opacity:0;}
+  .burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+  .mobile-menu{
+    position:fixed; inset:0; background:var(--bg); z-index:150;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:30px;
+    transform:translateY(-100%); transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  }
+  .mobile-menu.open{transform:translateY(0);}
+  .mobile-menu a{font-family:'Cormorant Garamond',serif; font-size:28px; letter-spacing:1px; text-transform:uppercase;}
+  @media(max-width:960px){.navlinks{display:none;} .burger{display:flex;} .logo{position:static; transform:none;} nav.wrap{justify-content:space-between;}}
+
+  /* HERO */
+  .hero{padding:80px 0 40px; position:relative;}
+  .hero-title{text-align:center; margin-bottom:56px;}
+  .hero-title .lead{font-size:19px; color:var(--muted); letter-spacing:.5px;}
+  .hero-title h1{font-size:clamp(38px,6vw,64px); margin-top:8px;}
+  .hero-title h1 em{font-style:italic; color:var(--gold);}
+
+  .hero-frame{
+    display:grid; grid-template-columns:170px 1fr 170px; gap:28px; align-items:center; position:relative;
+  }
+  .side-col{display:flex; flex-direction:column; gap:28px;}
+  .side-img{
+    border:1px solid var(--line); border-radius:2px; overflow:hidden; aspect-ratio:1/1; position:relative;
+  }
+  .side-img img{width:100%; height:100%; object-fit:cover; filter:grayscale(.15) brightness(.92); transition:transform .7s ease, filter .5s;}
+  .side-img:hover img{transform:scale(1.08); filter:grayscale(0) brightness(1);}
+  .center-arch{
+    position:relative; border-radius:260px 260px 8px 8px; overflow:hidden;
+    height:560px; box-shadow:0 40px 80px -30px rgba(0,0,0,.6);
+  }
+  .center-arch img{width:100%; height:100%; object-fit:cover;}
+  @media(max-width:900px){
+    .hero-frame{grid-template-columns:1fr; gap:16px;}
+    .side-col{flex-direction:row;}
+    .side-img{aspect-ratio:1.3/1;}
+    .center-arch{height:380px; border-radius:160px 160px 8px 8px;}
+  }
+
+  /* SECTION */
+  .section{padding:120px 0;}
+  @media(max-width:640px){.section{padding:76px 0;}}
+  .kicker{font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); display:flex; align-items:center; gap:12px;}
+  .kicker::before{content:''; width:24px; height:1px; background:var(--gold);}
+  .section-head h2{font-size:clamp(30px,4vw,46px); margin-top:16px;}
+  .section-head{max-width:600px; margin-bottom:50px;}
+  .section-head.center{margin-left:auto; margin-right:auto; text-align:center;}
+  .section-head.center .kicker{justify-content:center;}
+  .section-head.center .kicker::before{display:none;}
+
+  /* ABOUT */
+  .about{display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center;}
+  @media(max-width:900px){.about{grid-template-columns:1fr; gap:44px;}}
+  .about-img{position:relative; height:420px;}
+  .about-img img{width:100%; height:100%; object-fit:cover; border-radius:4px;}
+  .discover{
+    position:absolute; left:-34px; bottom:-34px; width:120px; height:120px; border-radius:50%;
+    background:rgba(20,19,17,0.85); border:1px solid var(--gold-soft); backdrop-filter:blur(6px);
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold);
+    cursor:pointer; transition:transform .4s, background .4s;
+  }
+  .discover:hover{transform:scale(1.08); background:var(--gold); color:var(--bg);}
+  @media(max-width:900px){.discover{left:14px; bottom:-24px; width:96px; height:96px; font-size:10px;}}
+  .about p.lead{color:var(--muted); font-size:16px; line-height:1.9; margin-top:20px; max-width:460px;}
+
+  .divider-timeline{display:flex; justify-content:center; margin:0 0;}
+  .divider-timeline .stem{width:1px; height:70px; background:var(--line); position:relative;}
+  .divider-timeline .stem::before{content:'✦'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:var(--gold); font-size:12px;}
+
+  /* CHEF */
+  .chef{display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center;}
+  @media(max-width:900px){.chef{grid-template-columns:1fr; gap:44px;}}
+  .chef-portrait{border-radius:50%; overflow:hidden; width:340px; height:340px; margin:0 auto; border:1px solid var(--line);}
+  .chef-portrait img{width:100%; height:100%; object-fit:cover;}
+  .chef-sig{font-family:'Cormorant Garamond',serif; font-style:italic; font-size:26px; color:var(--gold); margin-top:22px;}
+
+  /* MENU */
+  .menu-grid{display:grid; grid-template-columns:1fr 1fr; gap:50px 70px;}
+  @media(max-width:760px){.menu-grid{grid-template-columns:1fr;}}
+  .menu-item{display:flex; justify-content:space-between; gap:16px; padding-bottom:18px; border-bottom:1px solid var(--line); margin-bottom:18px;}
+  .menu-item h3{font-size:21px; font-weight:500;}
+  .menu-item p{color:var(--muted); font-size:13.5px; margin-top:6px; max-width:320px;}
+  .menu-item .price{font-family:'Cormorant Garamond',serif; color:var(--gold); font-size:20px; white-space:nowrap;}
+
+  /* GALLERY */
+  .gallery-grid{display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:160px; gap:14px;}
+  .gallery-grid a{grid-column:span 1; grid-row:span 1; overflow:hidden; border-radius:2px;}
+  .gallery-grid a:nth-child(1){grid-column:span 2; grid-row:span 2;}
+  .gallery-grid a:nth-child(4){grid-row:span 2;}
+  .gallery-grid img{width:100%; height:100%; object-fit:cover; filter:grayscale(.1) brightness(.92); transition:transform .6s ease, filter .5s;}
+  .gallery-grid a:hover img{transform:scale(1.08); filter:grayscale(0) brightness(1);}
+  @media(max-width:760px){
+    .gallery-grid{grid-template-columns:repeat(2,1fr); grid-auto-rows:130px;}
+    .gallery-grid a:nth-child(1){grid-column:span 2;}
+    .gallery-grid a:nth-child(4){grid-row:span 1;}
+  }
+
+  /* RESERVATION CTA */
+  .cta-band{
+    background:var(--bg-2); border:1px solid var(--line); border-radius:6px; padding:70px 60px;
+    display:flex; justify-content:space-between; align-items:center; gap:30px; flex-wrap:wrap; text-align:left;
+  }
+  .cta-band h2{font-size:clamp(26px,3.2vw,38px); max-width:480px;}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding:16px 34px; font-size:12px; letter-spacing:2px; text-transform:uppercase;
+    cursor:pointer; border:1px solid var(--gold); background:transparent; color:var(--gold);
+    transition:background .35s, color .35s;
+  }
+  .btn:hover{background:var(--gold); color:var(--bg);}
+
+  /* FOOTER */
+  footer{padding:70px 0 30px; border-top:1px solid var(--line);}
+  .foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1.2fr; gap:40px;}
+  @media(max-width:760px){.foot-grid{grid-template-columns:1fr 1fr; row-gap:36px;}}
+  .foot-grid h4{font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; color:var(--gold-soft);}
+  .foot-grid ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;}
+  .foot-grid a{font-size:14px; color:var(--muted); transition:color .25s;}
+  .foot-grid a:hover{color:var(--gold);}
+  .foot-bottom{margin-top:56px; padding-top:24px; border-top:1px solid var(--line); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:12px; color:var(--muted);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001s !important; transition-duration:.001s !important;}
+  }
+</style>
+</head>
+<body>
+<a href="index.html" aria-label="Back to templates" style="position:fixed;top:14px;right:16px;z-index:1000;padding:9px 14px;border-radius:999px;background:#111;color:#fff;font:600 12px/1 system-ui,sans-serif;letter-spacing:.04em;box-shadow:0 6px 18px rgba(0,0,0,.2);">&larr; Templates</a>
+
+<header>
+  <nav class="wrap">
+    <div class="navlinks">
+      <a href="#about" class="active">About</a>
+      <a href="#menu">Menu</a>
+      <a href="#contact">Reservation</a>
+    </div>
+    <div class="logo">
+      <div class="mark">Eclipse</div>
+      <div class="sub">BISTRO RESTAURANT</div>
+    </div>
+    <div class="navlinks">
+      <a href="#gallery">News</a>
+      <a href="#contact">Hours &amp; Location</a>
+      <a href="#contact">Email Us</a>
+    </div>
+    <div class="burger" id="burger"><span></span><span></span><span></span></div>
+  </nav>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about">About</a>
+  <a href="#menu">Menu</a>
+  <a href="#contact">Reservation</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#contact">Hours &amp; Location</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-title reveal in">
+      <div class="lead">Welcome to</div>
+      <h1><em>Eclipse</em> Bistro</h1>
+    </div>
+    <div class="hero-frame">
+      <div class="side-col reveal in" style="transition-delay:.1s;">
+        <div class="side-img"><img src="https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?q=80&w=500&auto=format&fit=crop" alt="Plated dessert"></div>
+        <div class="side-img"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=500&auto=format&fit=crop" alt="Chef plating dish"></div>
+        <div class="side-img"><img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=500&auto=format&fit=crop" alt="Cocktail on bar"></div>
+      </div>
+      <div class="center-arch reveal in" style="transition-delay:.05s;">
+        <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?q=80&w=1000&auto=format&fit=crop" alt="Bistro dining room">
+      </div>
+      <div class="side-col reveal in" style="transition-delay:.15s;">
+        <div class="side-img"><img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=500&auto=format&fit=crop" alt="Beer flight"></div>
+        <div class="side-img"><img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?q=80&w=500&auto=format&fit=crop" alt="Pancakes with berries"></div>
+        <div class="side-img"><img src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=500&auto=format&fit=crop" alt="Sandwich plate"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="wrap about">
+    <div class="reveal">
+      <div class="about-img">
+        <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?q=80&w=1000&auto=format&fit=crop" alt="Eclipse lounge and bar">
+        <div class="discover">Discover<br>More</div>
+      </div>
+    </div>
+    <div class="reveal" style="transition-delay:.1s;">
+      <span class="kicker">Since 2014</span>
+      <h2>About Eclipse</h2>
+      <p class="lead">Eclipse began as a single dim room and a short menu built entirely around what the market offered that morning. A decade later, the room has grown, the menu still changes daily, and the kitchen still answers to nothing but the season.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider-timeline"><div class="stem"></div></div>
+
+<!-- CHEF -->
+<section class="section">
+  <div class="wrap chef">
+    <div class="reveal">
+      <div class="chef-portrait">
+        <img src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?q=80&w=700&auto=format&fit=crop" alt="Head chef portrait">
+      </div>
+    </div>
+    <div class="reveal" style="transition-delay:.1s; text-align:center;">
+      <span class="kicker" style="justify-content:center;">Head Chef</span>
+      <h2 style="margin-top:14px;">The Chef</h2>
+      <p class="lead" style="margin:18px auto 0; text-align:center;">Trained in Lyon and shaped by a decade of small kitchens, our chef treats every plate as a short, deliberate sentence — nothing added that doesn't need to be there.</p>
+      <div class="chef-sig">Etienne Marchal</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-timeline"><div class="stem"></div></div>
+
+<!-- MENU -->
+<section class="section" id="menu">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="kicker" style="justify-content:center;">Seasonal Selections</span>
+      <h2>From the Kitchen</h2>
+    </div>
+    <div class="menu-grid reveal">
+      <div class="menu-item">
+        <div><h3>Seared Scallops</h3><p>Brown butter, cauliflower purée, golden raisin, capers</p></div>
+        <span class="price">$28</span>
+      </div>
+      <div class="menu-item">
+        <div><h3>Duck Confit</h3><p>Fondant potato, cherry gastrique, wilted greens</p></div>
+        <span class="price">$34</span>
+      </div>
+      <div class="menu-item">
+        <div><h3>Wild Mushroom Risotto</h3><p>Aged parmesan, black truffle, chive oil</p></div>
+        <span class="price">$26</span>
+      </div>
+      <div class="menu-item">
+        <div><h3>Grilled Octopus</h3><p>Smoked paprika, fingerling potato, salsa verde</p></div>
+        <span class="price">$30</span>
+      </div>
+      <div class="menu-item">
+        <div><h3>Beef Tartare</h3><p>Quail egg, cornichon, dijon, toasted brioche</p></div>
+        <span class="price">$24</span>
+      </div>
+      <div class="menu-item">
+        <div><h3>Chocolate Fondant</h3><p>Salted caramel, vanilla bean ice cream</p></div>
+        <span class="price">$14</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="section" id="gallery">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Moments at Eclipse</span>
+      <h2>Gallery</h2>
+    </div>
+    <div class="gallery-grid reveal">
+      <a href="#"><img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?q=80&w=900&auto=format&fit=crop" alt="Dining room"></a>
+      <a href="#"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=600&auto=format&fit=crop" alt="Chef plating"></a>
+      <a href="#"><img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=600&auto=format&fit=crop" alt="Cocktail"></a>
+      <a href="#"><img src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=600&auto=format&fit=crop" alt="Plated dish"></a>
+      <a href="#"><img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=600&auto=format&fit=crop" alt="Bar with drinks"></a>
+      <a href="#"><img src="https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?q=80&w=600&auto=format&fit=crop" alt="Dessert plate"></a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / RESERVATION -->
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <h2>Tables are limited, evenings fill quickly — reserve yours.</h2>
+      <a href="#" class="btn">Reserve a Table</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="mark" style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:26px;">Eclipse</div>
+        <p style="font-size:14px; color:var(--muted); margin-top:16px; max-width:260px;">A bistro built on the season's offerings and a decade of quiet discipline in the kitchen.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#contact">Reservation</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Hours</h4>
+        <ul>
+          <li style="color:var(--muted);">Tue–Sun — 6pm – 11pm</li>
+          <li style="color:var(--muted);">Closed Mondays</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li style="color:var(--muted);">9 Harborview Lane</li>
+          <li style="color:var(--muted);">Dehradun, Uttarakhand</li>
+          <li><a href="mailto:hello@eclipsebistro.com">hello@eclipsebistro.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Eclipse Bistro Restaurant. All rights reserved.</span>
+      <span>Seasonal, deliberate, quiet.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+burger.addEventListener('click', ()=>{
+  burger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+});
+mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>{
+  burger.classList.remove('open'); mobileMenu.classList.remove('open');
+}));
+
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Browse the restaurant landing page template collection.">
+  <title>Restaurant Templates</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#20211d; --muted:#6d7169; --paper:#f5f2eb; --card:#fffdfa; --accent:#b65732; --line:#dfd9cc; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:"DM Sans",sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    .shell { width:min(1180px, calc(100% - 40px)); margin:auto; }
+    header { padding:24px 0; border-bottom:1px solid var(--line); }
+    .brand { font:700 22px/1 "Playfair Display",serif; letter-spacing:-.03em; }
+    .hero { padding:76px 0 54px; max-width:720px; }
+    .eyebrow { margin:0 0 14px; color:var(--accent); font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
+    h1 { margin:0; font:700 clamp(42px,7vw,76px)/.98 "Playfair Display",serif; letter-spacing:-.055em; }
+    .intro { max-width:580px; margin:24px 0 0; color:var(--muted); font-size:17px; line-height:1.65; }
+    .templates { padding:10px 0 80px; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .card { display:flex; flex-direction:column; min-height:100%; overflow:hidden; background:var(--card); border:1px solid var(--line); border-radius:18px; box-shadow:0 4px 16px rgba(42,35,25,.04); transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+    .card:hover, .card:focus-visible { transform:translateY(-6px); border-color:#c7aa94; box-shadow:0 18px 34px rgba(42,35,25,.13); outline:none; }
+    .image { aspect-ratio:16/10; overflow:hidden; background:#d8d2c5; }
+    .image img { width:100%; height:100%; display:block; object-fit:cover; transition:transform .45s ease; }
+    .card:hover img, .card:focus-visible img { transform:scale(1.05); }
+    .content { display:flex; flex:1; flex-direction:column; align-items:flex-start; padding:24px; }
+    h2 { margin:0; font:600 28px/1.1 "Playfair Display",serif; letter-spacing:-.035em; }
+    .description { margin:12px 0 22px; color:var(--muted); font-size:14px; line-height:1.6; }
+    .button { margin-top:auto; padding:10px 15px; color:#fff; background:var(--ink); border-radius:999px; font-size:13px; font-weight:700; transition:background .2s ease; }
+    .card:hover .button, .card:focus-visible .button { background:var(--accent); }
+    footer { padding:25px 0 36px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }
+    @media (max-width:840px) { .grid { grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:560px) { .shell { width:min(100% - 32px, 1180px); } header { padding:20px 0; } .hero { padding:56px 0 38px; } .grid { grid-template-columns:1fr; gap:18px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell"><a class="brand" href="index.html">The Landing Library</a></div>
+  </header>
+  <main class="shell">
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">Template collection</p>
+      <h1 id="page-title">Choose a dining experience.</h1>
+      <p class="intro">Six distinct restaurant and food landing pages, ready to explore. Select any design to open its full interactive template.</p>
+    </section>
+    <section class="templates" aria-label="Landing page templates">
+      <div class="grid">
+        <a class="card" href="amber-oak.html" aria-label="View Amber and Oak template">
+          <div class="image"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=900&auto=format&fit=crop" alt="Latte art for Amber and Oak"></div>
+          <div class="content"><h2>Amber &amp; Oak</h2><p class="description">A warm, slow-roasted coffee house with an editorial, earthy feel.</p><span class="button">View Template &rarr;</span></div>
+        </a>
+        <a class="card" href="bitewise.html" aria-label="View Bitewise template">
+          <div class="image"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600&auto=format&fit=crop" alt="Burger for Bitewise"></div>
+          <div class="content"><h2>Bitewise</h2><p class="description">A bold, high-energy fast-food design made for instant appetite.</p><span class="button">View Template &rarr;</span></div>
+        </a>
+        <a class="card" href="crumbo.html" aria-label="View Crumbo template">
+          <div class="image"><img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=900&auto=format&fit=crop" alt="Fresh bread for Crumbo"></div>
+          <div class="content"><h2>Crumbo</h2><p class="description">A freshly baked, playful bakery landing page with handcrafted charm.</p><span class="button">View Template &rarr;</span></div>
+        </a>
+        <a class="card" href="eclipse.html" aria-label="View Eclipse template">
+          <div class="image"><img src="https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?q=80&w=500&auto=format&fit=crop" alt="Restaurant interior for Eclipse"></div>
+          <div class="content"><h2>Eclipse</h2><p class="description">A refined bistro concept with a dark, contemporary dining mood.</p><span class="button">View Template &rarr;</span></div>
+        </a>
+        <a class="card" href="plantify.html" aria-label="View Plantify template">
+          <div class="image"><img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=900&auto=format&fit=crop" alt="Plant-based food for Plantify"></div>
+          <div class="content"><h2>Plantify</h2><p class="description">A bright, fresh plant-based food truck experience full of color.</p><span class="button">View Template &rarr;</span></div>
+        </a>
+        <a class="card" href="zesty.html" aria-label="View Zesty template">
+          <div class="image"><img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1000&auto=format&fit=crop" alt="Fine-dining restaurant for Zesty"></div>
+          <div class="content"><h2>Zesty</h2><p class="description">An elegant European gourmet restaurant and wine cellar presentation.</p><span class="button">View Template &rarr;</span></div>
+        </a>
+      </div>
+    </section>
+  </main>
+  <footer><div class="shell">Restaurant landing page templates</div></footer>
+</body>
+</html>

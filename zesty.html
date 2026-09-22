@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Zesty — European Gourmet Restaurant & Wine Cellar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,300..600,1,300..600&family=Jost:ital,wght@0,300..600;1,300..400&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          cream: '#EDE7D9',
+          'cream-2': '#E6DFCE',
+          'cream-dark': '#DDD5C1',
+          ink: '#3B3222',
+          'ink-soft': '#6B6250',
+          'ink-light': '#9C927D',
+          terracotta: '#B5723B',
+          'terracotta-deep': '#9C5F2E',
+          'terracotta-light': '#D4925A',
+          line: '#C9C0A9',
+        },
+        fontFamily: {
+          serif: ['Fraunces', 'serif'],
+          sans: ['Jost', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --cream: #EDE7D9;
+    --cream-2: #E6DFCE;
+    --ink: #3B3222;
+    --ink-soft: #6B6250;
+    --terracotta: #B5723B;
+    --terracotta-deep: #9C5F2E;
+    --line: #C9C0A9;
+    --max: 1280px;
+  }
+  
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+  body {
+    margin: 0;
+    background-color: var(--cream);
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  h1, h2, h3, h4, .display {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0.5px;
+  }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--terracotta); }
+
+  /* Animations & Reveal */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal-l { opacity: 0; transform: translateX(-35px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal-l.in { opacity: 1; transform: translateX(0); }
+  .reveal-r { opacity: 0; transform: translateX(35px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal-r.in { opacity: 1; transform: translateX(0); }
+  .scale-in { opacity: 0; transform: scale(0.95); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .scale-in.in { opacity: 1; transform: scale(1); }
+
+  /* Hero Gradient Background Blur */
+  .blob {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    width: 85vw;
+    max-width: 900px;
+    height: 85vw;
+    max-height: 900px;
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: 0;
+    background: conic-gradient(from 90deg, #E7B98A, #EDE7D9 30%, #A9B98C 55%, #EDE7D9 80%, #E7B98A);
+    opacity: 0.55;
+    animation: hueflow 18s ease-in-out infinite alternate;
+  }
+  @keyframes hueflow {
+    0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+    100% { transform: translate(-50%, -50%) rotate(25deg) scale(1.08); }
+  }
+
+  /* Decorative Connectors */
+  .connector { display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; z-index: 1; }
+  .connector .ln { width: 1px; height: 36px; background: var(--line); }
+  .connector .dot { width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--ink-soft); }
+  .connector .dot.filled { background: var(--ink-soft); width: 4px; height: 4px; }
+
+  /* Kicker line */
+  .kicker { display: inline-flex; align-items: center; gap: 12px; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; }
+  .kicker .ln { width: 26px; height: 1px; background: var(--ink-soft); position: relative; }
+  .kicker .ln::after { content: ''; position: absolute; right: -3px; top: 50%; transform: translateY(-50%); width: 5px; height: 5px; border-radius: 50%; border: 1px solid var(--ink-soft); }
+
+  /* Modal Backdrop Effect */
+  .modal-backdrop {
+    background: rgba(40, 33, 22, 0.65);
+    backdrop-filter: blur(8px);
+  }
+
+  /* Tab active indicators */
+  .menu-tab.active {
+    background-color: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .course-step.active {
+    border-color: var(--terracotta);
+    background-color: rgba(181, 114, 59, 0.08);
+  }
+
+  /* Glass Cards */
+  .glass-card {
+    background: rgba(230, 223, 206, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(201, 192, 169, 0.5);
+  }
+</style>
+</head>
+<body class="relative min-h-screen text-ink antialiased selection:bg-terracotta selection:text-white">
+<a href="index.html" aria-label="Back to templates" style="position:fixed;top:14px;right:16px;z-index:1000;padding:9px 14px;border-radius:999px;background:#29251f;color:#fff;font:600 12px/1 system-ui,sans-serif;letter-spacing:.04em;box-shadow:0 6px 18px rgba(0,0,0,.2);">&larr; Templates</a>
+
+<header class="sticky top-0 z-50 bg-cream/80 backdrop-blur-md transition-all duration-300 border-b border-line/40">
+  <nav class="max-w-[1280px] mx-auto px-6 sm:px-10 h-24 flex items-center justify-between gap-6">
+    <a href="#about" class="hidden md:block text-xs uppercase tracking-[2.5px] text-ink-soft hover:text-terracotta transition-colors">About</a>
+    <a href="#menu" class="hidden md:block text-xs uppercase tracking-[2.5px] text-ink-soft hover:text-terracotta transition-colors">Menu</a>
+    <a href="#tasting" class="hidden md:block text-xs uppercase tracking-[2.5px] text-ink-soft hover:text-terracotta transition-colors">Tasting</a>
+    
+    <div class="hidden md:block flex-1 h-[1px] bg-line relative mx-4">
+      <div class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-1.5 h-1.5 rounded-full bg-cream border border-ink-soft"></div>
+    </div>
+
+    <a href="#" class="font-serif text-3xl lowercase tracking-wide text-ink font-semibold hover:opacity-80 transition-opacity">zesty</a>
+
+    <div class="hidden md:block flex-1 h-[1px] bg-line relative mx-4">
+      <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-cream border border-ink-soft"></div>
+    </div>
+
+    <a href="#cellar" class="hidden md:block text-xs uppercase tracking-[2.5px] text-ink-soft hover:text-terracotta transition-colors">Wine Cellar</a>
+    <a href="#private-dining" class="hidden md:block text-xs uppercase tracking-[2.5px] text-ink-soft hover:text-terracotta transition-colors">Private Dining</a>
+    
+    <button onclick="openModal()" class="hidden sm:inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs uppercase tracking-[2px] border border-ink bg-transparent text-ink hover:bg-ink hover:text-cream transition-all duration-300 transform hover:-translate-y-0.5">
+      Book Table
+    </button>
+
+    <!-- Mobile Burger Button -->
+    <button id="burger" aria-label="Toggle Navigation Menu" class="md:hidden flex flex-col gap-1.5 p-2 z-50 focus:outline-none">
+      <span class="w-6 h-0.5 bg-ink transition-transform duration-300"></span>
+      <span class="w-6 h-0.5 bg-ink transition-opacity duration-300"></span>
+      <span class="w-6 h-0.5 bg-ink transition-transform duration-300"></span>
+    </button>
+  </nav>
+</header>
+
+<!-- Mobile Menu Drawer -->
+<div id="mobileMenu" class="fixed inset-0 bg-cream z-40 flex flex-col items-center justify-center gap-8 -translate-y-full transition-transform duration-500 ease-out md:hidden px-6 text-center">
+  <a href="#about" class="mobile-link font-serif text-3xl text-ink hover:text-terracotta uppercase tracking-wider">About Us</a>
+  <a href="#menu" class="mobile-link font-serif text-3xl text-ink hover:text-terracotta uppercase tracking-wider">Seasonal Menu</a>
+  <a href="#tasting" class="mobile-link font-serif text-3xl text-ink hover:text-terracotta uppercase tracking-wider">Chef's Tasting</a>
+  <a href="#cellar" class="mobile-link font-serif text-3xl text-ink hover:text-terracotta uppercase tracking-wider">Sommelier Cellar</a>
+  <a href="#private-dining" class="mobile-link font-serif text-3xl text-ink hover:text-terracotta uppercase tracking-wider">Private Events</a>
+  <a href="#team" class="mobile-link font-serif text-3xl text-ink hover:text-terracotta uppercase tracking-wider">Culinary Team</a>
+  <a href="#faq" class="mobile-link font-serif text-3xl text-ink hover:text-terracotta uppercase tracking-wider">Guest FAQs</a>
+  <button onclick="openModal(); closeMobileMenu();" class="mt-4 px-8 py-4 bg-terracotta text-white rounded-full text-xs uppercase tracking-[2.5px] font-medium shadow-lg hover:bg-terracotta-deep transition-all">
+    Reserve A Table Now
+  </button>
+</div>
+
+<section class="relative pt-8 pb-20 md:pb-28 overflow-hidden">
+  <div class="blob"></div>
+  <div class="max-w-[1280px] mx-auto px-6 sm:px-10 relative z-10 flex flex-col items-center">
+    
+    <div class="connector reveal in mb-6">
+      <div class="ln"></div>
+      <div class="dot"></div>
+      <div class="dot filled"></div>
+    </div>
+
+    <div class="hero-title text-center max-w-4xl reveal in">
+      <span class="text-xs uppercase tracking-[3px] text-terracotta font-medium mb-4 block">Gourmet European Cuisine & Natural Wines</span>
+      <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-serif font-medium leading-[1.05] uppercase tracking-tight text-ink">
+        An Unhurried<br><span class="italic font-light text-terracotta lowercase">symphony</span> of flavor
+      </h1>
+      <p class="mt-8 max-w-xl mx-auto text-base sm:text-lg text-ink-soft leading-relaxed font-light">
+        Where European heritage meets the finest organic harvests. Experience seasonal tasting menus, artisanal pairing, and warm hospitality in an intimate setting.
+      </p>
+    </div>
+
+    <div class="mt-10 flex flex-wrap justify-center gap-4 sm:gap-6 reveal in">
+      <button onclick="openModal()" class="px-8 py-4 bg-terracotta text-white rounded-full text-xs uppercase tracking-[2.5px] font-medium hover:bg-terracotta-deep transition-all transform hover:-translate-y-1 shadow-lg shadow-terracotta/25">
+        Reserve Your Experience
+      </button>
+      <a href="#menu" class="px-8 py-4 border border-ink text-ink rounded-full text-xs uppercase tracking-[2.5px] font-medium hover:bg-ink hover:text-cream transition-all transform hover:-translate-y-1">
+        Explore Menu
+      </a>
+    </div>
+
+    <!-- Quick Stats Strip -->
+    <div class="mt-16 sm:mt-24 w-full grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-line/60 bg-cream-2/40 backdrop-blur-sm rounded-2xl px-6 text-center reveal">
+      <div>
+        <div class="font-serif text-2xl sm:text-3xl text-ink font-semibold">Michelin Guide</div>
+        <div class="text-xs uppercase tracking-wider text-ink-soft mt-1">Recognized 2024–2026</div>
+      </div>
+      <div>
+        <div class="font-serif text-2xl sm:text-3xl text-ink font-semibold">100% Local</div>
+        <div class="text-xs uppercase tracking-wider text-ink-soft mt-1">Farm-to-Table Organic</div>
+      </div>
+      <div>
+        <div class="font-serif text-2xl sm:text-3xl text-ink font-semibold">350+ Labels</div>
+        <div class="text-xs uppercase tracking-wider text-ink-soft mt-1">Artisanal Wine Vault</div>
+      </div>
+      <div>
+        <div class="font-serif text-2xl sm:text-3xl text-ink font-semibold">7 Courses</div>
+        <div class="text-xs uppercase tracking-wider text-ink-soft mt-1">Seasonal Tasting Menu</div>
+      </div>
+    </div>
+
+    <div class="connector reveal mt-10">
+      <div class="dot filled"></div>
+    </div>
+  </div>
+</section>
+
+<section class="py-20 md:py-28" id="about">
+  <div class="max-w-[1280px] mx-auto px-6 sm:px-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    
+    <div class="reveal-l">
+      <div class="kicker"><div class="ln"></div>Our Story & Ethos</div>
+      <h2 class="text-3xl sm:text-5xl font-serif uppercase leading-[1.1] mt-4 mb-6">
+        Crafting Moments Around The Table
+      </h2>
+      <p class="text-ink-soft text-base sm:text-lg leading-relaxed mb-6">
+        Founded on the premise that fine dining should be rich with soul and free of pretension, Zesty brings together classical European techniques with contemporary culinary innovation.
+      </p>
+      <p class="text-ink-soft text-base leading-relaxed mb-8">
+        Every plate starts with a genuine relationship — with organic growers in the valley, day-boat fishermen, and small-batch biodynamic vineyards. We cook with absolute respect for what each season brings.
+      </p>
+      
+      <div class="flex items-center gap-6 border-t border-line/60 pt-6">
+        <div>
+          <div class="font-serif text-lg font-semibold text-ink">Julian Vance</div>
+          <div class="text-xs uppercase tracking-wider text-ink-soft">Executive Chef & Founder</div>
+        </div>
+        <div class="h-8 w-[1px] bg-line"></div>
+        <div class="italic text-sm text-ink-soft font-serif">"Simplicity is the ultimate sophistication on a plate."</div>
+      </div>
+    </div>
+
+    <div class="relative h-[450px] sm:h-[540px] reveal-r">
+      <div class="absolute top-0 right-0 w-[85%] h-[75%] rounded-2xl overflow-hidden shadow-xl">
+        <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1000&auto=format&fit=crop" alt="Restaurant interior" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700">
+      </div>
+      <div class="absolute bottom-0 left-0 w-[55%] h-[58%] rounded-2xl overflow-hidden border-[8px] border-cream shadow-2xl">
+        <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=700&auto=format&fit=crop" alt="Artisanal cocktail" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700">
+      </div>
+      <div class="absolute -bottom-4 right-8 bg-terracotta text-white p-6 rounded-2xl shadow-xl max-w-[200px] hidden sm:block">
+        <div class="font-serif text-3xl font-semibold">12+</div>
+        <div class="text-xs uppercase tracking-wider mt-1 opacity-90">Years of Culinary Excellence</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="py-20 md:py-28 bg-cream-2/60 rounded-[3rem] my-8 mx-4 sm:mx-8 border border-line/50" id="menu">
+  <div class="max-w-[1280px] mx-auto px-6 sm:px-10">
+    
+    <div class="text-center max-w-2xl mx-auto mb-12 reveal">
+      <div class="kicker justify-center mb-3"><div class="ln"></div>À La Carte Menu</div>
+      <h2 class="text-3xl sm:text-5xl font-serif uppercase">Seasonal Creations</h2>
+      <p class="text-ink-soft mt-4 text-base">Explore our current spring offering. All dishes are prepared fresh daily using sustainable ingredients.</p>
+    </div>
+
+    <!-- Filter Category Tabs -->
+    <div class="flex flex-wrap justify-center gap-3 mb-12 reveal">
+      <button onclick="filterMenu('all')" class="menu-tab active px-6 py-2.5 rounded-full border border-line text-xs uppercase tracking-[2px] transition-all">All Items</button>
+      <button onclick="filterMenu('starters')" class="menu-tab px-6 py-2.5 rounded-full border border-line text-xs uppercase tracking-[2px] transition-all">Starters</button>
+      <button onclick="filterMenu('mains')" class="menu-tab px-6 py-2.5 rounded-full border border-line text-xs uppercase tracking-[2px] transition-all">Mains</button>
+      <button onclick="filterMenu('desserts')" class="menu-tab px-6 py-2.5 rounded-full border border-line text-xs uppercase tracking-[2px] transition-all">Desserts</button>
+      <button onclick="filterMenu('cocktails')" class="menu-tab px-6 py-2.5 rounded-full border border-line text-xs uppercase tracking-[2px] transition-all">Cocktails</button>
+    </div>
+
+    <!-- Dietary Filter Legend -->
+    <div class="flex flex-wrap justify-center gap-6 text-xs text-ink-soft mb-10 pb-6 border-b border-line/40 reveal">
+      <span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-600"></span> GF = Gluten Free</span>
+      <span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-600"></span> VG = Vegan</span>
+      <span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-terracotta"></span> ORG = 100% Organic</span>
+    </div>
+
+    <!-- Menu Grid -->
+    <div id="menuGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Dynamic menu items inserted via JavaScript -->
+    </div>
+
+  </div>
+</section>
+
+<section class="py-20 md:py-28" id="tasting">
+  <div class="max-w-[1280px] mx-auto px-6 sm:px-10">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      
+      <!-- Left Info Header -->
+      <div class="lg:col-span-5 reveal-l">
+        <div class="kicker"><div class="ln"></div>The Signature Journey</div>
+        <h2 class="text-3xl sm:text-5xl font-serif uppercase leading-[1.1] mt-3 mb-6">
+          Chef’s 7-Course Tasting Explorer
+        </h2>
+        <p class="text-ink-soft text-base leading-relaxed mb-8">
+          An immersive multi-sensory journey designed by Chef Vance. Each course represents a tribute to European micro-regions and local seasonal abundance.
+        </p>
+
+        <div class="bg-cream-2 p-6 rounded-2xl border border-line/60 mb-8 space-y-4">
+          <div class="flex justify-between items-center pb-3 border-b border-line/40">
+            <span class="text-xs uppercase tracking-wider text-ink-soft">Tasting Menu Price</span>
+            <span class="font-serif text-xl font-semibold text-ink">$185 <span class="text-xs font-sans text-ink-soft font-normal">/ guest</span></span>
+          </div>
+          <div class="flex justify-between items-center pb-3 border-b border-line/40">
+            <span class="text-xs uppercase tracking-wider text-ink-soft">Sommelier Wine Pairing</span>
+            <span class="font-serif text-xl font-semibold text-terracotta">+$110 <span class="text-xs font-sans text-ink-soft font-normal">/ guest</span></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-xs uppercase tracking-wider text-ink-soft">Duration</span>
+            <span class="text-sm font-medium text-ink">Approx. 2.5 Hours</span>
+          </div>
+        </div>
+
+        <button onclick="openModalWithExperience('Tasting Menu')" class="w-full py-4 bg-ink text-cream rounded-full text-xs uppercase tracking-[2.5px] font-medium hover:bg-terracotta transition-all shadow-md">
+          Reserve Tasting Experience
+        </button>
+      </div>
+
+      <!-- Right Interactive Course Navigator -->
+      <div class="lg:col-span-7 bg-cream-2/80 rounded-3xl p-6 sm:p-10 border border-line/60 shadow-xl reveal-r">
+        <div class="text-xs uppercase tracking-[2px] text-terracotta font-medium mb-6">Click to preview courses</div>
+        
+        <!-- Course Selection Pills -->
+        <div id="courseSteps" class="grid grid-cols-7 gap-2 mb-8">
+          <!-- Rendered via JS -->
+        </div>
+
+        <!-- Selected Course Display Box -->
+        <div id="courseDisplay" class="bg-cream rounded-2xl p-6 sm:p-8 border border-line/60 min-h-[300px] flex flex-col justify-between transition-all duration-300">
+          <!-- Rendered via JS -->
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<section class="py-20 md:py-28 bg-ink text-cream rounded-[3rem] my-8 mx-4 sm:mx-8 relative overflow-hidden" id="cellar">
+  <div class="max-w-[1280px] mx-auto px-6 sm:px-10 relative z-10">
+    
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 reveal">
+      <div>
+        <div class="kicker text-cream-2/70"><div class="ln bg-cream-2/70"></div>Sommelier’s Cellar</div>
+        <h2 class="text-3xl sm:text-5xl font-serif uppercase text-cream mt-3">Rare Vintages & Natural Wines</h2>
+      </div>
+      <p class="text-cream-2/80 max-w-md text-sm sm:text-base leading-relaxed">
+        Curated by Lead Sommelier Elena Rostova, our vault features over 350 biodynamic, organic, and iconic European labels.
+      </p>
+    </div>
+
+    <!-- Featured Wines Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <!-- Wine Card 1 -->
+      <div class="bg-ink-soft/30 backdrop-blur-md p-8 rounded-2xl border border-cream/10 hover:border-terracotta/50 transition-all duration-300 group flex flex-col justify-between reveal" style="transition-delay: 0s;">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="px-3 py-1 bg-terracotta/20 text-terracotta-light border border-terracotta/30 text-[10px] uppercase tracking-wider rounded-full">Bordeaux, France</span>
+            <span class="font-serif text-xl font-medium text-cream">$240</span>
+          </div>
+          <h3 class="text-2xl font-serif text-cream mb-2 group-hover:text-terracotta-light transition-colors">Château Léoville Las Cases</h3>
+          <div class="text-xs uppercase tracking-wider text-cream-2/60 mb-4">Saint-Julien Grand Cru | 2015</div>
+          <p class="text-xs text-cream-2/70 leading-relaxed mb-6">
+            Deep ruby with intense notes of cassis, cedar wood, and crushed graphite. Elegant structured tannins with an everlasting finish.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-cream/10 flex items-center justify-between">
+          <span class="text-[11px] uppercase tracking-wider text-cream-2/60">Pairing: Lamb Ribeye</span>
+          <button onclick="showWineDetails('Château Léoville Las Cases 2015')" class="text-xs uppercase tracking-wider text-terracotta-light hover:underline">Notes →</button>
+        </div>
+      </div>
+
+      <!-- Wine Card 2 -->
+      <div class="bg-ink-soft/30 backdrop-blur-md p-8 rounded-2xl border border-cream/10 hover:border-terracotta/50 transition-all duration-300 group flex flex-col justify-between reveal" style="transition-delay: 0.1s;">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="px-3 py-1 bg-terracotta/20 text-terracotta-light border border-terracotta/30 text-[10px] uppercase tracking-wider rounded-full">Piedmont, Italy</span>
+            <span class="font-serif text-xl font-medium text-cream">$195</span>
+          </div>
+          <h3 class="text-2xl font-serif text-cream mb-2 group-hover:text-terracotta-light transition-colors">Barolo Riserva Monfortino</h3>
+          <div class="text-xs uppercase tracking-wider text-cream-2/60 mb-4">Giacomo Conterno | 2016</div>
+          <p class="text-xs text-cream-2/70 leading-relaxed mb-6">
+            Ethereal bouquet of dried rose petals, white truffle, sour cherry, and leather. Vibrant acidity and profound complexity.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-cream/10 flex items-center justify-between">
+          <span class="text-[11px] uppercase tracking-wider text-cream-2/60">Pairing: Truffle Tagliatelle</span>
+          <button onclick="showWineDetails('Barolo Riserva Monfortino 2016')" class="text-xs uppercase tracking-wider text-terracotta-light hover:underline">Notes →</button>
+        </div>
+      </div>
+
+      <!-- Wine Card 3 -->
+      <div class="bg-ink-soft/30 backdrop-blur-md p-8 rounded-2xl border border-cream/10 hover:border-terracotta/50 transition-all duration-300 group flex flex-col justify-between reveal" style="transition-delay: 0.2s;">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="px-3 py-1 bg-terracotta/20 text-terracotta-light border border-terracotta/30 text-[10px] uppercase tracking-wider rounded-full">Wachau, Austria</span>
+            <span class="font-serif text-xl font-medium text-cream">$145</span>
+          </div>
+          <h3 class="text-2xl font-serif text-cream mb-2 group-hover:text-terracotta-light transition-colors">Grüner Veltliner Smaragd</h3>
+          <div class="text-xs uppercase tracking-wider text-cream-2/60 mb-4">Weingut F.X. Pichler | 2021</div>
+          <p class="text-xs text-cream-2/70 leading-relaxed mb-6">
+            Crisp white pepper, ripe green apple, flinty minerality and vibrant citrus zest. Extraordinary focus and texture.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-cream/10 flex items-center justify-between">
+          <span class="text-[11px] uppercase tracking-wider text-cream-2/60">Pairing: Sea Bass</span>
+          <button onclick="showWineDetails('Grüner Veltliner Smaragd 2021')" class="text-xs uppercase tracking-wider text-terracotta-light hover:underline">Notes →</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<section class="py-20 md:py-28" id="private-dining">
+  <div class="max-w-[1280px] mx-auto px-6 sm:px-10">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      
+      <div class="order-2 lg:order-1 relative rounded-3xl overflow-hidden h-[480px] shadow-2xl reveal-l">
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1000&auto=format&fit=crop" alt="Private Dining Room" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent flex flex-col justify-end p-8 text-cream">
+          <span class="text-xs uppercase tracking-[2px] text-terracotta-light">Bespoke Celebrations</span>
+          <h3 class="text-3xl font-serif">The Solarium Private Vault</h3>
+          <p class="text-xs text-cream-2/80 mt-2">Seats up to 18 guests with dedicated private kitchen service and personal sommelier.</p>
+        </div>
+      </div>
+
+      <div class="order-1 lg:order-2 reveal-r">
+        <div class="kicker"><div class="ln"></div>Private Events</div>
+        <h2 class="text-3xl sm:text-5xl font-serif uppercase leading-[1.1] mt-3 mb-6">
+          Unforgettable Private Gatherings
+        </h2>
+        <p class="text-ink-soft text-base leading-relaxed mb-8">
+          Whether hosting an intimate family celebration, corporate gala, or wine tasting dinner, Zesty offers dedicated private dining suites crafted for distinction.
+        </p>
+
+        <!-- Interactive Party Size Estimator Widget -->
+        <div class="bg-cream-2 p-6 rounded-2xl border border-line/60">
+          <div class="text-xs uppercase tracking-[2px] text-terracotta font-medium mb-4">Group Event Estimator</div>
+          
+          <div class="mb-4">
+            <label class="text-xs uppercase text-ink-soft mb-2 block">Guest Count: <span id="partyCountVal" class="font-bold text-ink font-serif text-base">12 Guests</span></label>
+            <input type="range" id="partyRange" min="6" max="30" value="12" class="w-full accent-terracotta cursor-pointer" oninput="updatePartyEstimator(this.value)">
+          </div>
+
+          <div id="estimatorResult" class="p-4 bg-cream rounded-xl border border-line/40 text-xs space-y-2">
+            <div class="flex justify-between">
+              <span class="text-ink-soft">Recommended Room:</span>
+              <span class="font-semibold text-ink" id="roomName">The Solarium Vault</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-ink-soft">Estimated Minimum Spend:</span>
+              <span class="font-semibold text-terracotta" id="roomPrice">$1,800 - $2,400</span>
+            </div>
+          </div>
+
+          <button onclick="openModalWithExperience('Private Event Inquiry')" class="w-full mt-6 py-3.5 bg-terracotta text-white rounded-full text-xs uppercase tracking-[2px] font-medium hover:bg-terracotta-deep transition-all">
+            Inquire For Private Event
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<section class="py-20 md:py-28 bg-cream-2/40 border-y border-line/50" id="team">
+  <div class="max-w-[1280px] mx-auto px-6 sm:px-10">
+    
+    <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+      <div class="kicker justify-center mb-3"><div class="ln"></div>Masters of the Craft</div>
+      <h2 class="text-3xl sm:text-5xl font-serif uppercase">Meet Our Culinary Leaders</h2>
+      <p class="text-ink-soft mt-4 text-base">Driven by curiosity, trained in Europe’s legendary kitchens, and devoted to hospitality.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      
+      <!-- Team Card 1 -->
+      <div class="bg-cream rounded-3xl p-8 border border-line/60 flex flex-col sm:flex-row gap-6 items-center shadow-md hover:shadow-xl transition-all duration-300 reveal-l">
+        <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=400&auto=format&fit=crop" alt="Executive Chef Julian Vance" class="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl object-cover shrink-0">
+        <div>
+          <span class="text-[10px] uppercase tracking-[2px] text-terracotta font-medium">Executive Chef</span>
+          <h3 class="text-2xl font-serif text-ink mt-1 mb-2">Julian Vance</h3>
+          <p class="text-xs text-ink-soft leading-relaxed mb-4">
+            Formerly at Michelin 3-star Le Meurice in Paris. Julian combines classic French rigor with contemporary Nordic minimalism.
+          </p>
+          <div class="text-[11px] italic text-ink/80 font-serif">"Respect every ingredient; give it space to shine."</div>
+        </div>
+      </div>
+
+      <!-- Team Card 2 -->
+      <div class="bg-cream rounded-3xl p-8 border border-line/60 flex flex-col sm:flex-row gap-6 items-center shadow-md hover:shadow-xl transition-all duration-300 reveal-r">
+        <img src="https://images.unsplash.com/photo-1581299894007-aaa50297cf16?q=80&w=400&auto=format&fit=crop" alt="Sommelier Elena Rostova" class="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl object-cover shrink-0">
+        <div>
+          <span class="text-[10px] uppercase tracking-[2px] text-terracotta font-medium">Head Sommelier</span>
+          <h3 class="text-2xl font-serif text-ink mt-1 mb-2">Elena Rostova</h3>
+          <p class="text-xs text-ink-soft leading-relaxed mb-4">
+            Master Sommelier with 15 years curating cellars across Europe. Champion of low-intervention organic vintages.
+          </p>
+          <div class="text-[11px] italic text-ink/80 font-serif">"A great wine doesn't complement food; it elevates it."</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<section class="py-20 md:py-28" id="faq">
+  <div class="max-w-[900px] mx-auto px-6 sm:px-10">
+    
+    <div class="text-center mb-16 reveal">
+      <div class="kicker justify-center mb-3"><div class="ln"></div>Guest Guidelines</div>
+      <h2 class="text-3xl sm:text-5xl font-serif uppercase">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="space-y-4 reveal">
+      
+      <!-- FAQ Item 1 -->
+      <div class="border border-line/60 rounded-2xl bg-cream-2/40 overflow-hidden">
+        <button onclick="toggleFaq(this)" class="w-full p-6 text-left flex justify-between items-center font-serif text-lg text-ink hover:text-terracotta transition-colors">
+          <span>What is the restaurant dress code?</span>
+          <span class="text-xl font-light font-sans transition-transform duration-300 icon">+</span>
+        </button>
+        <div class="faq-content hidden px-6 pb-6 text-sm text-ink-soft leading-relaxed border-t border-line/30 pt-4">
+          We welcome Smart Casual to Formal attire. We politely request that guests refrain from wearing athletic shorts, beach slippers, or gymwear.
+        </div>
+      </div>
+
+      <!-- FAQ Item 2 -->
+      <div class="border border-line/60 rounded-2xl bg-cream-2/40 overflow-hidden">
+        <button onclick="toggleFaq(this)" class="w-full p-6 text-left flex justify-between items-center font-serif text-lg text-ink hover:text-terracotta transition-colors">
+          <span>What is your cancellation policy?</span>
+          <span class="text-xl font-light font-sans transition-transform duration-300 icon">+</span>
+        </button>
+        <div class="faq-content hidden px-6 pb-6 text-sm text-ink-soft leading-relaxed border-t border-line/30 pt-4">
+          Reservations can be modified or cancelled up to 24 hours prior without fee. Late cancellations or no-shows within 24 hours may incur a fee of $50 per person.
+        </div>
+      </div>
+
+      <!-- FAQ Item 3 -->
+      <div class="border border-line/60 rounded-2xl bg-cream-2/40 overflow-hidden">
+        <button onclick="toggleFaq(this)" class="w-full p-6 text-left flex justify-between items-center font-serif text-lg text-ink hover:text-terracotta transition-colors">
+          <span>Can dietary restrictions be accommodated?</span>
+          <span class="text-xl font-light font-sans transition-transform duration-300 icon">+</span>
+        </button>
+        <div class="faq-content hidden px-6 pb-6 text-sm text-ink-soft leading-relaxed border-t border-line/30 pt-4">
+          Absolutely. We gladly accommodate gluten-free, vegan, vegetarian, and allergy requirements. Please note restrictions during booking so our chefs can prepare bespoke alternatives.
+        </div>
+      </div>
+
+      <!-- FAQ Item 4 -->
+      <div class="border border-line/60 rounded-2xl bg-cream-2/40 overflow-hidden">
+        <button onclick="toggleFaq(this)" class="w-full p-6 text-left flex justify-between items-center font-serif text-lg text-ink hover:text-terracotta transition-colors">
+          <span>What is your corkage fee policy?</span>
+          <span class="text-xl font-light font-sans transition-transform duration-300 icon">+</span>
+        </button>
+        <div class="faq-content hidden px-6 pb-6 text-sm text-ink-soft leading-relaxed border-t border-line/30 pt-4">
+          Our corkage fee is $45 per 750ml bottle for up to two bottles not currently represented on our wine list.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<section class="py-12" id="contact">
+  <div class="max-w-[1280px] mx-auto px-6 sm:px-10">
+    <div class="bg-ink text-cream rounded-3xl p-10 sm:p-16 flex flex-col md:flex-row justify-between items-center gap-8 shadow-2xl reveal">
+      <div>
+        <span class="text-xs uppercase tracking-[3px] text-terracotta-light font-medium">Limited Seating Available</span>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif text-cream mt-2 leading-tight">
+          Reserve your table for an<br><span class="italic font-light text-cream-2">unforgettable evening</span>.
+        </h2>
+      </div>
+      <button onclick="openModal()" class="px-8 py-4 bg-terracotta text-white rounded-full text-xs uppercase tracking-[2.5px] font-medium hover:bg-terracotta-deep transition-all shrink-0 shadow-lg">
+        Book Your Reservation
+      </button>
+    </div>
+  </div>
+</section>
+
+<footer class="pt-16 pb-10 border-t border-line/60">
+  <div class="max-w-[1280px] mx-auto px-6 sm:px-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-16">
+      
+      <div class="lg:col-span-2">
+        <a href="#" class="font-serif text-3xl font-semibold text-ink lowercase">zesty</a>
+        <p class="mt-4 text-sm text-ink-soft max-w-sm leading-relaxed">
+          A European gourmet kitchen built around organic seasonal harvests, rare wine pairings, and warm, unhurried hospitality.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="text-xs uppercase tracking-[2px] text-ink font-semibold mb-4">Navigation</h4>
+        <ul class="space-y-2 text-sm text-ink-soft">
+          <li><a href="#about" class="hover:text-terracotta transition-colors">About Ethos</a></li>
+          <li><a href="#menu" class="hover:text-terracotta transition-colors">À La Carte Menu</a></li>
+          <li><a href="#tasting" class="hover:text-terracotta transition-colors">Tasting Menu</a></li>
+          <li><a href="#cellar" class="hover:text-terracotta transition-colors">Wine Cellar</a></li>
+          <li><a href="#private-dining" class="hover:text-terracotta transition-colors">Private Events</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-xs uppercase tracking-[2px] text-ink font-semibold mb-4">Hours</h4>
+        <ul class="space-y-2 text-sm text-ink-soft">
+          <li>Tue – Thu: 5:00 PM – 10:30 PM</li>
+          <li>Fri – Sat: 5:00 PM – 11:30 PM</li>
+          <li>Sunday: 4:30 PM – 10:00 PM</li>
+          <li class="text-terracotta font-medium">Closed Mondays</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-xs uppercase tracking-[2px] text-ink font-semibold mb-4">Location</h4>
+        <ul class="space-y-2 text-sm text-ink-soft">
+          <li>18 Orchard Row</li>
+          <li>Dehradun, Uttarakhand</li>
+          <li class="pt-2"><a href="mailto:reservations@zesty.com" class="text-terracotta underline">reservations@zesty.com</a></li>
+          <li>+91 (135) 298-4720</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="pt-8 border-t border-line/40 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-ink-soft">
+      <div>© 2026 Zesty Gourmet Restaurant. All rights reserved.</div>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-ink">Privacy Policy</a>
+        <a href="#" class="hover:text-ink">Terms of Service</a>
+        <a href="#" class="hover:text-ink">Press Kit</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="bookingModal" class="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+  <div class="bg-cream rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-line/80 shadow-2xl relative transform scale-95 transition-all duration-300 modal-content max-h-[90vh] overflow-y-auto">
+    
+    <button onclick="closeModal()" class="absolute top-6 right-6 text-ink-soft hover:text-ink text-2xl font-light focus:outline-none">✕</button>
+
+    <div class="text-center mb-6">
+      <span class="text-[10px] uppercase tracking-[2.5px] text-terracotta font-medium">Instant Confirmation</span>
+      <h3 class="text-2xl font-serif text-ink mt-1">Reserve Your Experience</h3>
+    </div>
+
+    <form id="reservationForm" onsubmit="handleReservationSubmit(event)" class="space-y-4">
+      
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-ink-soft mb-1.5 font-medium">Date</label>
+          <input type="date" required id="resDate" class="w-full px-4 py-3 rounded-xl bg-cream-2 border border-line text-sm text-ink focus:outline-none focus:border-terracotta">
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-ink-soft mb-1.5 font-medium">Time Slot</label>
+          <select required id="resTime" class="w-full px-4 py-3 rounded-xl bg-cream-2 border border-line text-sm text-ink focus:outline-none focus:border-terracotta">
+            <option value="17:00">5:00 PM</option>
+            <option value="18:00">6:00 PM</option>
+            <option value="19:00">7:00 PM</option>
+            <option value="20:00">8:00 PM</option>
+            <option value="21:00">9:00 PM</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-ink-soft mb-1.5 font-medium">Guests</label>
+          <select required id="resGuests" class="w-full px-4 py-3 rounded-xl bg-cream-2 border border-line text-sm text-ink focus:outline-none focus:border-terracotta">
+            <option value="1">1 Person</option>
+            <option value="2" selected>2 Guests</option>
+            <option value="3">3 Guests</option>
+            <option value="4">4 Guests</option>
+            <option value="5">5 Guests</option>
+            <option value="6">6 Guests</option>
+            <option value="7">7 Guests</option>
+            <option value="8">8+ (Group)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-ink-soft mb-1.5 font-medium">Seating Area</label>
+          <select required id="resArea" class="w-full px-4 py-3 rounded-xl bg-cream-2 border border-line text-sm text-ink focus:outline-none focus:border-terracotta">
+            <option value="Main Dining Room">Main Dining Room</option>
+            <option value="Garden Terrace">Garden Terrace</option>
+            <option value="Chef's Counter">Chef's Counter</option>
+            <option value="Private Solarium Vault">Private Solarium Vault</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-ink-soft mb-1.5 font-medium">Full Name</label>
+        <input type="text" placeholder="Elena Rostova" required id="resName" class="w-full px-4 py-3 rounded-xl bg-cream-2 border border-line text-sm text-ink focus:outline-none focus:border-terracotta">
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-ink-soft mb-1.5 font-medium">Email Address</label>
+          <input type="email" placeholder="elena@example.com" required id="resEmail" class="w-full px-4 py-3 rounded-xl bg-cream-2 border border-line text-sm text-ink focus:outline-none focus:border-terracotta">
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-ink-soft mb-1.5 font-medium">Phone Number</label>
+          <input type="tel" placeholder="+91 98765 43210" required id="resPhone" class="w-full px-4 py-3 rounded-xl bg-cream-2 border border-line text-sm text-ink focus:outline-none focus:border-terracotta">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-ink-soft mb-1.5 font-medium">Special Requests & Dietary Notes</label>
+        <textarea placeholder="Anniversary celebration, dietary allergies, wine preferences..." id="resNotes" rows="2" class="w-full px-4 py-2.5 rounded-xl bg-cream-2 border border-line text-sm text-ink focus:outline-none focus:border-terracotta"></textarea>
+      </div>
+
+      <button type="submit" class="w-full py-4 bg-terracotta text-white rounded-full text-xs uppercase tracking-[2.5px] font-medium hover:bg-terracotta-deep transition-all shadow-md">
+        Confirm Reservation
+      </button>
+
+    </form>
+
+    <!-- Confirmation Success Message -->
+    <div id="bookingSuccess" class="hidden text-center py-8 space-y-4">
+      <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto text-2xl">✓</div>
+      <h4 class="text-2xl font-serif text-ink">Reservation Confirmed!</h4>
+      <p class="text-xs text-ink-soft max-w-xs mx-auto leading-relaxed" id="successDetails"></p>
+      <button onclick="closeModal()" class="px-6 py-2.5 bg-ink text-cream rounded-full text-xs uppercase tracking-wider">Close Window</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// --- Data: À La Carte Menu ---
+const menuItems = [
+  { id: 1, name: "Pan-Seared Sea Bass", category: "mains", price: "$32", tags: ["GF", "ORG"], img: "https://images.unsplash.com/photo-1476124369491-e7addf5db371?q=80&w=700&auto=format&fit=crop", desc: "Crisp skin sea bass, caramelized fennel purée, saffron velouté, and sea fennel oil." },
+  { id: 2, name: "Herb Roasted Lamb Ribeye", category: "mains", price: "$36", tags: ["GF"], img: "https://images.unsplash.com/photo-1432139555190-58524dae6a55?q=80&w=700&auto=format&fit=crop", desc: "Grass-fed lamb, black garlic jus, heirloom baby carrots, and rosemary pomme purée." },
+  { id: 3, name: "Truffle Tagliatelle", category: "mains", price: "$28", tags: ["ORG"], img: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?q=80&w=700&auto=format&fit=crop", desc: "Handcrafted egg pasta, Umbrian summer truffle, cultured butter, and 36-month Parmigiano Reggiano." },
+  { id: 4, name: "Heirloom Burrata Salad", category: "starters", price: "$18", tags: ["GF", "ORG"], img: "https://images.unsplash.com/photo-1592417817098-8f3d6ef23a81?q=80&w=700&auto=format&fit=crop", desc: "Artisanal burrata, smoked peaches, wild arugula, aged Modena balsamic, and roasted pine nuts." },
+  { id: 5, name: "Wagyu Beef Tartare", category: "starters", price: "$22", tags: ["GF"], img: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=700&auto=format&fit=crop", desc: "Hand-cut A5 Wagyu, cured egg yolk, pickled mustard seeds, and sourdough crisp." },
+  { id: 6, name: "Dark Chocolate Fondant", category: "desserts", price: "$16", tags: ["ORG"], img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=700&auto=format&fit=crop", desc: "Valrhona 70% dark chocolate center, pistachio gelato, and candied blood orange zest." },
+  { id: 7, name: "Seasonal Berry Mille-Feuille", category: "desserts", price: "$15", tags: ["ORG"], img: "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=700&auto=format&fit=crop", desc: "Caramelized puff pastry, Tahitian vanilla bean diplomat cream, and fresh alpine raspberries." },
+  { id: 8, name: "Citrus Spritz Cocktail", category: "cocktails", price: "$17", tags: ["VG"], img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=700&auto=format&fit=crop", desc: "Artisanal gin, bergamot liqueur, clarified grapefruit juice, sparkling prosecco, and thyme sprig." },
+];
+
+// --- Data: Chef's 7-Course Tasting Menu ---
+const tastingCourses = [
+  { course: 1, title: "Amuse-Bouche", dish: "Compressed Melon & Caviar", desc: "Wild Ossetra caviar, compressed honeydew, lemon verbena foam.", pairing: "Champagne Laurent-Perrier La Cuvée" },
+  { course: 2, title: "First Starter", dish: "Seared Hokkaido Scallops", desc: "Cauliflower mousseline, brown butter emulsion, toasted hazelnuts.", pairing: "Chablis Premier Cru 2020" },
+  { course: 3, title: "Second Starter", dish: "Wild Mushroom Consommé", desc: "Morel raviolini, pine needle oil, shaved black truffle.", pairing: "Pinot Noir Bourgogne Blanc 2019" },
+  { course: 4, title: "Fish Course", dish: "Butter-Poached Lobster Tail", desc: "Saffron risotto, sea asparagus, sweet corn reduction.", pairing: "Meursault Domaine des Comtes 2018" },
+  { course: 5, title: "Main Course", dish: "Dry-Aged Duck Breast", desc: "Roasted beetroot purée, spiced cherry jus, wilted Swiss chard.", pairing: "Barolo Monprivato 2016" },
+  { course: 6, title: "Palate Cleanser", dish: "Yuzu & Basil Granita", desc: "Organic yuzu sorbet, crisp opal basil glass.", pairing: "Sparkling Elderflower Infusion" },
+  { course: 7, title: "Dessert", dish: "Deconstructed Meyer Lemon Tart", desc: "Toasted Italian meringue, lemon curd, graham crumble.", pairing: "Château d’Yquem Sauternes 2015" },
+];
+
+// --- Render Menu Items ---
+function renderMenu(filter = "all") {
+  const container = document.getElementById('menuGrid');
+  const filtered = filter === "all" ? menuItems : menuItems.filter(item => item.category === filter);
+  
+  container.innerHTML = filtered.map(item => `
+    <div class="dish flex flex-col sm:flex-row gap-6 p-5 bg-cream rounded-2xl border border-line/60 hover:border-terracotta/60 transition-all duration-300 shadow-sm hover:shadow-md">
+      <img src="${item.img}" alt="${item.name}" class="w-full sm:w-36 h-36 rounded-xl object-cover shrink-0">
+      <div class="flex flex-col justify-between flex-1">
+        <div>
+          <div class="flex justify-between items-start gap-2 mb-1">
+            <h3 class="font-serif text-xl text-ink font-medium">${item.name}</h3>
+            <span class="font-serif text-lg font-semibold text-terracotta">${item.price}</span>
+          </div>
+          <p class="text-xs text-ink-soft leading-relaxed mb-3">${item.desc}</p>
+        </div>
+        <div class="flex gap-2">
+          ${item.tags.map(t => `<span class="px-2 py-0.5 bg-cream-2 border border-line text-[10px] uppercase tracking-wider text-ink-soft font-medium rounded-md">${t}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterMenu(category) {
+  document.querySelectorAll('.menu-tab').forEach(tab => tab.classList.remove('active'));
+  event.target.classList.add('active');
+  renderMenu(category);
+}
+
+// --- Render Course Steps ---
+let currentCourseIndex = 0;
+
+function renderCourseSteps() {
+  const container = document.getElementById('courseSteps');
+  container.innerHTML = tastingCourses.map((c, idx) => `
+    <button onclick="selectCourse(${idx})" class="course-step ${idx === currentCourseIndex ? 'active' : ''} py-3 text-center border border-line rounded-xl transition-all hover:border-terracotta">
+      <div class="text-[10px] uppercase text-ink-soft">Course</div>
+      <div class="font-serif font-bold text-ink">${c.course}</div>
+    </button>
+  `).join('');
+  displayCourse(currentCourseIndex);
+}
+
+function selectCourse(index) {
+  currentCourseIndex = index;
+  renderCourseSteps();
+}
+
+function displayCourse(index) {
+  const c = tastingCourses[index];
+  const container = document.getElementById('courseDisplay');
+  container.innerHTML = `
+    <div>
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs uppercase tracking-[2px] text-terracotta font-medium">Course ${c.course} of 7 — ${c.title}</span>
+        <span class="text-xs text-ink-soft font-sans">Tasting Experience</span>
+      </div>
+      <h3 class="text-2xl sm:text-3xl font-serif text-ink font-semibold mb-3">${c.dish}</h3>
+      <p class="text-sm text-ink-soft leading-relaxed mb-6">${c.desc}</p>
+    </div>
+    <div class="pt-4 border-t border-line/60 flex flex-col sm:flex-row justify-between sm:items-center gap-2 bg-cream-2/50 p-4 rounded-xl">
+      <span class="text-xs uppercase tracking-wider text-ink-soft font-medium">Sommelier Pairing:</span>
+      <span class="text-xs font-serif text-terracotta-deep font-semibold">${c.pairing}</span>
+    </div>
+  `;
+}
+
+// --- Private Event Party Estimator ---
+function updatePartyEstimator(val) {
+  document.getElementById('partyCountVal').innerText = val + " Guests";
+  const roomName = document.getElementById('roomName');
+  const roomPrice = document.getElementById('roomPrice');
+  
+  if (val <= 8) {
+    roomName.innerText = "The Garden Alcove";
+    roomPrice.innerText = "$800 - $1,200";
+  } else if (val <= 18) {
+    roomName.innerText = "The Solarium Vault";
+    roomPrice.innerText = "$1,800 - $2,400";
+  } else {
+    roomName.innerText = "Full Restaurant Buyout";
+    roomPrice.innerText = "$4,500 - $6,500";
+  }
+}
+
+// --- Wine Details Modal / Alert ---
+function showWineDetails(wineName) {
+  alert(`Detailed tasting profile & vintage records for "${wineName}" can be reserved upon dining request with Sommelier Elena Rostova.`);
+}
+
+// --- FAQ Accordion Toggle ---
+function toggleFaq(btn) {
+  const content = btn.nextElementSibling;
+  const icon = btn.querySelector('.icon');
+  const isHidden = content.classList.contains('hidden');
+  
+  document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+  document.querySelectorAll('.icon').forEach(i => i.innerText = '+');
+  
+  if (isHidden) {
+    content.classList.remove('hidden');
+    icon.innerText = '−';
+  }
+}
+
+// --- Reservation Modal Logic ---
+function openModal() {
+  const modal = document.getElementById('bookingModal');
+  modal.classList.remove('opacity-0', 'pointer-events-none');
+  modal.querySelector('.modal-content').classList.remove('scale-95');
+  document.getElementById('resDate').valueAsDate = new Date();
+}
+
+function openModalWithExperience(expName) {
+  openModal();
+  document.getElementById('resNotes').value = `Interested in booking experience: ${expName}`;
+}
+
+function closeModal() {
+  const modal = document.getElementById('bookingModal');
+  modal.classList.add('opacity-0', 'pointer-events-none');
+  modal.querySelector('.modal-content').classList.add('scale-95');
+  setTimeout(() => {
+    document.getElementById('reservationForm').reset();
+    document.getElementById('reservationForm').classList.remove('hidden');
+    document.getElementById('bookingSuccess').classList.add('hidden');
+  }, 300);
+}
+
+function handleReservationSubmit(e) {
+  e.preventDefault();
+  const name = document.getElementById('resName').value;
+  const date = document.getElementById('resDate').value;
+  const time = document.getElementById('resTime').value;
+  const guests = document.getElementById('resGuests').value;
+  const area = document.getElementById('resArea').value;
+
+  document.getElementById('reservationForm').classList.add('hidden');
+  const successBox = document.getElementById('bookingSuccess');
+  successBox.classList.remove('hidden');
+  document.getElementById('successDetails').innerText = `Thank you, ${name}. Your table for ${guests} guests in the ${area} on ${date} at ${time} is confirmed. A confirmation email has been sent.`;
+}
+
+// --- Mobile Navigation Menu ---
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+burger.addEventListener('click', () => {
+  mobileMenu.classList.toggle('-translate-y-full');
+});
+
+function closeMobileMenu() {
+  mobileMenu.classList.add('-translate-y-full');
+}
+
+document.querySelectorAll('.mobile-link').forEach(link => {
+  link.addEventListener('click', closeMobileMenu);
+});
+
+// --- Intersection Observer for Reveal Animations ---
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderMenu('all');
+  renderCourseSteps();
+  document.querySelectorAll('.reveal, .reveal-l, .reveal-r, .scale-in').forEach(el => observer.observe(el));
+});
+</script>
+
+</body>
+</html>
